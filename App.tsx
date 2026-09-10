@@ -76,7 +76,7 @@ function AppContent() {
         </View>
 
         {/* Divider */}
-        <View style={styles.divider}></View>
+        <View style={styles.divider} />
 
       </View>
     </View>
