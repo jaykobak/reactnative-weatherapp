@@ -47,7 +47,7 @@
 
 // export default App;
 
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type CityProps = {
@@ -85,9 +85,14 @@ function AppContent() {
         {/* Card title */}
         <View style={styles.wrapper}>
           <Text style={styles.title}>Saved cities</Text>
-          <View style={styles.blueDot}>
+          <Pressable
+            style={styles.blueDot}
+            onPress={() => {
+              console.log('Hello world');
+            }}
+          >
             <Text style={styles.subtitle}>+</Text>
-          </View>
+          </Pressable>
         </View>
 
         {/* Divider */}
