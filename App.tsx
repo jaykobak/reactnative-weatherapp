@@ -50,12 +50,18 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+type CityProps = {
+  cName: string;
+  cTemp: string;
+  cColor: string;
+}
+
 function App() {
   return (
     <SafeAreaProvider>
       <AppContent />
     </SafeAreaProvider>
-  )
+  );
 }
 
 function AppContent() {
@@ -76,16 +82,24 @@ function AppContent() {
         </View>
 
         {/* Divider */}
-        <View style={styles.divider} />
+        <View style={[ styles.divider, { marginBottom: 15 } ]} />
 
-        {/* City row */}
-        <View style={styles.cityRow}>
-          <View style={styles.dot} />
-          <Text style={styles.cityName}>Lisbon</Text>
-          <Text style={styles.temperature}>72°F</Text>
-        </View>
+        {/* City rows */}
+        <City cName="Lisbon" cTemp="72°F" cColor="#F5A623" />
+        <City cName="Tokyo" cTemp="64°F" cColor="#94A3B8" />
+        <City cName="Austin" cTemp="82°F" cColor="#3B82F6" />
 
       </View>
+    </View>
+  );
+}
+
+function City({cName, cTemp, cColor}: CityProps) {
+  return (
+    <View style={styles.cityRow}>
+      <View style={[ styles.dot, { backgroundColor: cColor } ]} />
+      <Text style={styles.cityName}>{cName}</Text>
+      <Text style={styles.temperature}>{cTemp}</Text>
     </View>
   );
 }
@@ -103,6 +117,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 25,
     padding: 20,
+    paddingBottom: 30,
   },
 
   wrapper: {
@@ -143,14 +158,13 @@ const styles = StyleSheet.create({
   cityRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 28,
+    marginVertical: 15,
   },
 
   dot: {
     width: 15,
     height: 15,
     borderRadius: 7.5,
-    backgroundColor: '#F5A623',
     marginRight: 18,
   },
 
