@@ -65,14 +65,23 @@ function App() {
 }
 
 function AppContent() {
-  const insets = useSafeAreaInsets()
+  const insets = useSafeAreaInsets();
+
+  const cities = [
+    {id: 1, name: 'Lisbon', temperature: '72°F', color: '#F5A623'},
+    {id: 2, name: 'Tokyo', temperature: '64°F', color: '#94A3B8'},
+    {id: 3, name: 'Austin', temperature: '82°F', color: '#3B82F6'}
+  ];
 
   return (
-    <View style={[ styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom} ]}>
-
+    <View
+      style={[
+        styles.container,
+        { paddingTop: insets.top, paddingBottom: insets.bottom },
+      ]}
+    >
       {/* White card */}
       <View style={styles.card}>
-
         {/* Card title */}
         <View style={styles.wrapper}>
           <Text style={styles.title}>Saved cities</Text>
@@ -82,13 +91,19 @@ function AppContent() {
         </View>
 
         {/* Divider */}
-        <View style={[ styles.divider, { marginBottom: 15 } ]} />
+        <View style={[styles.divider, { marginBottom: 15 }]} />
 
         {/* City rows */}
-        <City cName="Lisbon" cTemp="72°F" cColor="#F5A623" />
-        <City cName="Tokyo" cTemp="64°F" cColor="#94A3B8" />
-        <City cName="Austin" cTemp="82°F" cColor="#3B82F6" />
-
+        {cities.map(city => {
+          return (
+            <City
+              key={city.id}
+              cName={city.name}
+              cTemp={city.temperature}
+              cColor={city.color}
+            />
+          );
+        })}
       </View>
     </View>
   );
