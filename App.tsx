@@ -78,6 +78,13 @@ function AppContent() {
         {/* Divider */}
         <View style={styles.divider} />
 
+        {/* City row */}
+        <View style={styles.cityRow}>
+          <View style={styles.dot} />
+          <Text style={styles.cityName}>Lisbon</Text>
+          <Text style={styles.temperature}>72°F</Text>
+        </View>
+
       </View>
     </View>
   );
@@ -131,6 +138,32 @@ const styles = StyleSheet.create({
     height: 2.5,
     width: '100%',
     borderRadius: 20,
+  },
+
+  cityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 28,
+  },
+
+  dot: {
+    width: 15,
+    height: 15,
+    borderRadius: 7.5,
+    backgroundColor: '#F5A623',
+    marginRight: 18,
+  },
+
+  cityName: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: '#16181D',
+    flex: 1,
+  },
+
+  temperature: {
+    color: '#6B7280',
+    fontSize: 18,
   }
 })
 
