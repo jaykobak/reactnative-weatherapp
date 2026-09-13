@@ -1,13 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 // import { NewAppScreen } from '@react-native/new-app-screen';
-
-
 
 // import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
 // import {
@@ -46,159 +37,18 @@
 // });
 
 // export default App;
-
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
-
-type CityProps = {
-  cName: string;
-  cTemp: string;
-  cColor: string;
-}
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import AppNavigator from './src/navigation/AppNavigator';
 
 function App() {
   return (
     <SafeAreaProvider>
-      <AppContent />
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 }
-
-function AppContent() {
-  const insets = useSafeAreaInsets();
-
-  const cities = [
-    {id: 1, name: 'Lisbon', temperature: '72°F', color: '#F5A623'},
-    {id: 2, name: 'Tokyo', temperature: '64°F', color: '#94A3B8'},
-    {id: 3, name: 'Austin', temperature: '82°F', color: '#3B82F6'}
-  ];
-
-  return (
-    <View
-      style={[
-        styles.container,
-        { paddingTop: insets.top, paddingBottom: insets.bottom },
-      ]}
-    >
-      {/* White card */}
-      <View style={styles.card}>
-        {/* Card title */}
-        <View style={styles.wrapper}>
-          <Text style={styles.title}>Saved cities</Text>
-          <Pressable
-            style={styles.blueDot}
-            onPress={() => {
-              console.log('Hello world');
-            }}
-          >
-            <Text style={styles.subtitle}>+</Text>
-          </Pressable>
-        </View>
-
-        {/* Divider */}
-        <View style={[styles.divider, { marginBottom: 15 }]} />
-
-        {/* City rows */}
-        {cities.map(city => {
-          return (
-            <City
-              key={city.id}
-              cName={city.name}
-              cTemp={city.temperature}
-              cColor={city.color}
-            />
-          );
-        })}
-      </View>
-    </View>
-  );
-}
-
-function City({cName, cTemp, cColor}: CityProps) {
-  return (
-    <View style={styles.cityRow}>
-      <View style={[ styles.dot, { backgroundColor: cColor } ]} />
-      <Text style={styles.cityName}>{cName}</Text>
-      <Text style={styles.temperature}>{cTemp}</Text>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F0F3F8',
-    paddingHorizontal: 30,
-    justifyContent: 'center',
-  },
-
-  card: {
-    backgroundColor: 'white',
-    width: '100%',
-    borderRadius: 25,
-    padding: 20,
-    paddingBottom: 30,
-  },
-
-  wrapper: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-
-  title: {
-    color: '#16181D',
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-
-  blueDot: {
-    backgroundColor: '#2563EB',
-    height: 40,
-    width: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  subtitle: {
-    color: 'white',
-    fontSize: 32,
-    includeFontPadding: false,
-  },
-
-  divider: {
-    backgroundColor: '#E3E7EE',
-    height: 2.5,
-    width: '100%',
-    borderRadius: 20,
-  },
-
-  cityRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 15,
-  },
-
-  dot: {
-    width: 15,
-    height: 15,
-    borderRadius: 7.5,
-    marginRight: 18,
-  },
-
-  cityName: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    color: '#16181D',
-    flex: 1,
-  },
-
-  temperature: {
-    color: '#6B7280',
-    fontSize: 18,
-  }
-})
 
 export default App;
