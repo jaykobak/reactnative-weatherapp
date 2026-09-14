@@ -1,9 +1,13 @@
 import { View, Text } from 'react-native';
 
-function WeatherDetailScreen() {
+function WeatherDetailScreen({ route }) {
+
+    // Get the city name
+    const { cityName } = route.params;
+
     return (
         <View>
-            <Text>Weather Detail</Text>
+            <Text>{ cityName }</Text>
         </View>
     );
 }
