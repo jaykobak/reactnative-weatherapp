@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 type CityProps = {
   cName: string;
@@ -10,6 +11,7 @@ type CityProps = {
 
 function SavedCitiesScreen() {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
 
   const cities = [
     { id: 1, name: 'Lisbon', temperature: '72°F', color: '#F5A623' },
@@ -32,7 +34,7 @@ function SavedCitiesScreen() {
           <Pressable
             style={styles.blueDot}
             onPress={() => {
-              console.log('Hello world');
+              navigation.navigate('AddCity');
             }}
           >
             <Text style={styles.subtitle}>+</Text>
