@@ -53,7 +53,7 @@ function SavedCitiesScreen() {
               cTemp={city.temperature}
               cColor={city.color}
               onPress={() => {
-                Alert.alert(city.name);
+                navigation.navigate('WeatherDetail', { cityName: city.name });
               }}
             />
           );
