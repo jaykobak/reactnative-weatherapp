@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 function AddCityScreen() {
@@ -7,6 +7,8 @@ function AddCityScreen() {
     return (
       <View>
         <Text>Add City</Text>
+        <TextInput placeholder='Enter a city' />
+
         <Pressable
           onPress={() => {
             navigation.goBack();
