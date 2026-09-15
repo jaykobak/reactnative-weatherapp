@@ -1,9 +1,25 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {
+  createNativeStackNavigator,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import SavedCitiesScreen from '../screens/SavedCitiesScreen';
 import AddCityScreen from '../screens/AddCityScreen';
 import WeatherDetailScreen from '../screens/WeatherDetailScreen';
 
-const Stack = createNativeStackNavigator();
+export type RootStackParamList = {
+  SavedCities: undefined;
+  AddCity: undefined;
+  WeatherDetail: {
+    cityName: string;
+  };
+};
+
+export type WeatherDetailScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'WeatherDetail'
+>;
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function AppNavigator() {
   return (

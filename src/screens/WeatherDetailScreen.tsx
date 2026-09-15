@@ -1,6 +1,7 @@
 import { View, Text } from 'react-native';
+import { WeatherDetailScreenProps } from '../navigation/AppNavigator';
 
-function WeatherDetailScreen({ route }) {
+function WeatherDetailScreen({ route }: WeatherDetailScreenProps) {
 
     // Get the city name
     const { cityName } = route.params;
