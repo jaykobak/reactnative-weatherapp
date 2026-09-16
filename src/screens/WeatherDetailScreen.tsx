@@ -6,6 +6,7 @@ function WeatherDetailScreen({ route }: WeatherDetailScreenProps) {
     // Get the city name
     const { cityName } = route.params;
     const [weatherData, setWeatherData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     async function getWeather() {
         // Get latitude and longitude from geocoding api
@@ -22,6 +23,7 @@ function WeatherDetailScreen({ route }: WeatherDetailScreenProps) {
         const weatherDat = await weatherResponse.json();
 
         setWeatherData(weatherDat.current);
+        setIsLoading(false)
     };
 
     useEffect(() => {
@@ -30,11 +32,20 @@ function WeatherDetailScreen({ route }: WeatherDetailScreenProps) {
 
     return (
         <View>
-            <Text>{ JSON.stringify(weatherData) }</Text>
+            {
+                isLoading ? (
+                    <Text>Weather loading...</Text>
+                ) : (
+                    <>
+                        <Text>{ JSON.stringify(weatherData) }</Text>
+                        <Text>Current temperature: { weatherData?.temperature_2m }°C</Text>
+                    </>
+                )
+            }
         </View>
     );
 }
 
 export default WeatherDetailScreen;
 
-// https://api.open-meteo.com/v1/forecast?latitude=6.5244&longitude=3.3792&current=temperature_2m,relative_humidity_2m,wind_speed_10m
+// 08032031348
