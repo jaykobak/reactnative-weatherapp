@@ -3,6 +3,46 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { WeatherDetailScreenProps } from '../navigation/AppNavigator';
 import { useNavigation } from '@react-navigation/native';
 
+function getWeatherDescription(code : number) {
+  if (code === 0) {
+    return 'Clear sky';
+  }
+
+  if (code === 1 || code === 2 || code === 3) {
+    return 'Cloudy';
+  }
+
+  if (code === 45 || code === 48) {
+    return 'Foggy';
+  }
+
+  if (code >= 51 && code <= 57) {
+    return 'Drizzle';
+  }
+
+  if (code >= 61 && code <= 67) {
+    return 'Rain';
+  }
+
+  if (code >= 71 && code <= 77) {
+    return 'Snow';
+  }
+
+  if (code >= 80 && code <= 82) {
+    return 'Rain showers';
+  }
+
+  if (code >= 85 && code <= 86) {
+    return 'Snow showers';
+  }
+
+  if (code >= 95) {
+    return 'Thunderstorm';
+  }
+
+  return 'Unknown';
+}
+
 function WeatherDetailScreen({ route }: WeatherDetailScreenProps) {
     const navigation = useNavigation();
 
@@ -13,6 +53,10 @@ function WeatherDetailScreen({ route }: WeatherDetailScreenProps) {
     const [error, setError] = useState('');
 
     async function getWeather() {
+      // Set is Loading to true at the beginning
+      setIsLoading(true);
+      setError('');
+
       try {
         // Get latitude and longitude from geocoding api
         const geocodingEndpoint = `https://geocoding-api.open-meteo.com/v1/search?name=${cityName}&count=1`;
@@ -62,7 +106,7 @@ function WeatherDetailScreen({ route }: WeatherDetailScreenProps) {
                 <Text style={styles.backArrow}>←</Text>
               </Pressable>
               <Text style={styles.headerTitle}>{cityName}</Text>
-              <Pressable>
+              <Pressable onPress={ getWeather }>
                 <Text style={styles.refreshIcon}>↻</Text>
               </Pressable>
             </View>
@@ -75,7 +119,7 @@ function WeatherDetailScreen({ route }: WeatherDetailScreenProps) {
               <Text style={styles.temperatureText}>
                 {weatherData?.temperature_2m}°C
               </Text>
-              <Text style={styles.subtext}>Live weather conditions</Text>
+              <Text style={styles.subtext}>{getWeatherDescription(weatherData?.weather_code)}</Text>
             </View>
 
             {/* Bottom Boxes */}
