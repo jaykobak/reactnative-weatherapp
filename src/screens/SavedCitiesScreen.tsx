@@ -1,6 +1,8 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type CityProps = {
   cName: string;
@@ -13,11 +15,21 @@ function SavedCitiesScreen() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
 
-  const cities = [
-    { id: 1, name: 'Lisbon', temperature: '72°F', color: '#F5A623' },
-    { id: 2, name: 'Tokyo', temperature: '64°F', color: '#94A3B8' },
-    { id: 3, name: 'Austin', temperature: '82°F', color: '#3B82F6' },
-  ];
+  const [cities, setCities] = useState([
+    { id: 1, name: 'Lisbon', color: '#F5A623' },
+    { id: 2, name: 'Tokyo', color: '#94A3B8' },
+    { id: 3, name: 'Austin', color: '#3B82F6' },
+  ]);
+
+  useEffect(() => {
+    async function loadCities() {
+      const savedCities = await AsyncStorage.getItem('savedCities');
+
+      Alert.alert(savedCities);
+    }
+
+    loadCities();
+  }, []);
 
   return (
     <View
