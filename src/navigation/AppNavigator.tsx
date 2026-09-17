@@ -24,9 +24,9 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function AppNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="SavedCities" component={SavedCitiesScreen} />
-      <Stack.Screen name="AddCity" component={AddCityScreen} />
-      <Stack.Screen name="WeatherDetail" component={WeatherDetailScreen} />
+      <Stack.Screen name="SavedCities" component={SavedCitiesScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="AddCity" component={AddCityScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="WeatherDetail" component={WeatherDetailScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
