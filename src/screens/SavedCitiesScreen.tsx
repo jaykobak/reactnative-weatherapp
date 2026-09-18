@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import { useState, useEffect } from 'react';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useState, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type CityProps = {
@@ -21,19 +21,21 @@ function SavedCitiesScreen() {
     { id: 3, name: 'Austin', color: '#3B82F6' },
   ]);
 
-  useEffect(() => {
-    async function loadCities() {
-      const savedCities = await AsyncStorage.getItem('savedCities');
+  async function loadCities() {
+    const savedCities = await AsyncStorage.getItem('savedCities');
 
-      if (savedCities) {
-        const parsedCities = JSON.parse(savedCities);
+    if (savedCities) {
+      const parsedCities = JSON.parse(savedCities);
 
-        setCities(parsedCities);
-      }
+      setCities(parsedCities);
     }
+  };
 
-    loadCities();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadCities();
+    }, [])
+  );
 
   return (
     <View
