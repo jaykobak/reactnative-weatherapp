@@ -20,16 +20,54 @@ function SavedCitiesScreen() {
     { id: 2, name: 'Tokyo', color: '#94A3B8' },
     { id: 3, name: 'Austin', color: '#3B82F6' },
   ]);
+  const [temperatures, setTemperatures] = useState({});
 
   async function loadCities() {
     const savedCities = await AsyncStorage.getItem('savedCities');
+
+    console.log(savedCities)
 
     if (savedCities) {
       const parsedCities = JSON.parse(savedCities);
 
       setCities(parsedCities);
+
+      loadTemperatures(parsedCities);
+
+      console.log(temperatures)
     }
   };
+
+  // Get the temperatures from the weather api
+  async function loadTemperatures(cities) {
+    const newTemperatures = {};
+
+    for (const city of cities) {
+      try {
+        const geocodingEndpoint =
+          `https://geocoding-api.open-meteo.com/v1/search?name=${city.name}&count=1`;
+
+        const response = await fetch(geocodingEndpoint);
+        const data = await response.json();
+
+        const latitude = data.results[0].latitude;
+        const longitude = data.results[0].longitude;
+
+        const weatherEndpoint =
+          `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m`;
+
+        const weatherResponse = await fetch(weatherEndpoint);
+        const weatherData = await weatherResponse.json();
+
+        newTemperatures[city.name] =
+          weatherData.current.temperature_2m;
+      } catch {
+        newTemperatures[city.name] = null;
+      }
+    }
+
+    setTemperatures(newTemperatures);
+  }
 
   useFocusEffect(
     useCallback(() => {
@@ -68,6 +106,7 @@ function SavedCitiesScreen() {
             <City
               key={city.id}
               cName={city.name}
+              cTemp={temperatures[city.name]}
               cColor={city.color}
               onPress={() => {
                 navigation.navigate('WeatherDetail', { cityName: city.name });
@@ -85,7 +124,7 @@ function City({ cName, cTemp, cColor, onPress }: CityProps) {
     <Pressable style={styles.cityRow} onPress={onPress}>
       <View style={[styles.dot, { backgroundColor: cColor }]} />
       <Text style={styles.cityName}>{cName}</Text>
-      <Text style={styles.temperature}>{cTemp}</Text>
+      <Text style={styles.temperature}>{cTemp}°C</Text>
     </Pressable>
   );
 }
