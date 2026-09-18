@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -23,12 +23,26 @@ function AddCityScreen() {
   }
 
   async function addCity() {
+    if (!cityName.trim()) {
+      return Alert.alert("Please enter a valid input")
+    }
+
     const savedCities = await AsyncStorage.getItem('savedCities');
 
     let cities = [];
 
+    // Check if there is content in async storage
     if (savedCities) {
       cities = JSON.parse(savedCities);
+    }
+
+    // Check if the city already exists
+    for(let i = 0; i < cities.length; i++) {
+      const currentCity = cities[i];
+
+      if (currentCity.name.toLowerCase() === cityName.trim().toLowerCase()) {
+        return Alert.alert("This city already exists in the list of saved cities");
+      }
     }
 
     const newCity = {
