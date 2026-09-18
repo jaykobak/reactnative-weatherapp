@@ -11,6 +11,8 @@ export type RootStackParamList = {
   AddCity: undefined;
   WeatherDetail: {
     cityName: string;
+    latitude?: number;
+    longitude?: number;
   };
 };
 

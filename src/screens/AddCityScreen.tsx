@@ -2,10 +2,39 @@ import { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Geolocation from '@react-native-community/geolocation';
+import { PermissionsAndroid } from 'react-native';
 
 function AddCityScreen() {
   const navigation = useNavigation();
   const [cityName, setCityName] = useState('');
+
+  // Get the phone's current location
+  async function getCurrentLocation() {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    );
+
+    if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('Location permission denied');
+      return;
+    }
+
+    Geolocation.getCurrentPosition(
+      position => {
+        const { latitude, longitude } = position.coords;
+
+        navigation.navigate('WeatherDetail', {
+          cityName: 'Current location',
+          latitude: latitude,
+          longitude: longitude,
+        });
+      },
+      error => {
+        console.log(error);
+      },
+    );
+  }
 
   function generateRandomColor() {
     const colors = [
@@ -100,7 +129,7 @@ function AddCityScreen() {
         </View>
 
         {/* Secondary Button */}
-        <Pressable style={styles.secondaryButton}>
+        <Pressable style={styles.secondaryButton} onPress={getCurrentLocation}>
           <Text style={styles.secondaryButtonText}>
             Use my current location
           </Text>

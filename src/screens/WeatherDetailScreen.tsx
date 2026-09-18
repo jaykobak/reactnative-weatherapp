@@ -47,7 +47,7 @@ function WeatherDetailScreen({ route }: WeatherDetailScreenProps) {
     const navigation = useNavigation();
 
     // Get the city name
-    const { cityName } = route.params;
+    const { cityName, latitude, longitude } = route.params;
     const [weatherData, setWeatherData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -59,15 +59,20 @@ function WeatherDetailScreen({ route }: WeatherDetailScreenProps) {
 
       try {
         // Get latitude and longitude from geocoding api
-        const geocodingEndpoint = `https://geocoding-api.open-meteo.com/v1/search?name=${cityName}&count=1`;
-        const response = await fetch(geocodingEndpoint);
-        const data = await response.json();
+        let cityLatitude = latitude;
+        let cityLongitude = longitude;
 
-        const latitude = data.results[0].latitude;
-        const longitude = data.results[0].longitude;
+        if (cityLatitude === undefined || cityLongitude === undefined) {
+          const geocodingEndpoint = `https://geocoding-api.open-meteo.com/v1/search?name=${cityName}&count=1`;
+          const response = await fetch(geocodingEndpoint);
+          const data = await response.json();
+
+          cityLatitude = data.results[0].latitude;
+          cityLongitude = data.results[0].longitude;
+        }
 
         // Get the weather from open meteo api
-        const weatherEndpoint = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code`;
+        const weatherEndpoint = `https://api.open-meteo.com/v1/forecast?latitude=${cityLatitude}&longitude=${cityLongitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code`;
         const weatherResponse = await fetch(weatherEndpoint);
         const weatherDat = await weatherResponse.json();
 
