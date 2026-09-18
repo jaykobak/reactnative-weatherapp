@@ -25,7 +25,11 @@ function SavedCitiesScreen() {
     async function loadCities() {
       const savedCities = await AsyncStorage.getItem('savedCities');
 
-      Alert.alert(savedCities);
+      if (savedCities) {
+        const parsedCities = JSON.parse(savedCities);
+
+        setCities(parsedCities);
+      }
     }
 
     loadCities();
@@ -62,7 +66,6 @@ function SavedCitiesScreen() {
             <City
               key={city.id}
               cName={city.name}
-              cTemp={city.temperature}
               cColor={city.color}
               onPress={() => {
                 navigation.navigate('WeatherDetail', { cityName: city.name });

@@ -1,10 +1,51 @@
 import { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function AddCityScreen() {
   const navigation = useNavigation();
   const [cityName, setCityName] = useState('');
+
+  function generateRandomColor() {
+    const colors = [
+      '#F5A623',
+      '#94A3B8',
+      '#3B82F6',
+      '#22C55E',
+      '#A855F7',
+      '#EF4444',
+    ];
+
+    const randomIndex = Math.floor(Math.random() * colors.length);
+
+    return colors[randomIndex];
+  }
+
+  async function addCity() {
+    const savedCities = await AsyncStorage.getItem('savedCities');
+
+    let cities = [];
+
+    if (savedCities) {
+      cities = JSON.parse(savedCities);
+    }
+
+    const newCity = {
+      id: Date.now(),
+      name: cityName,
+      color: generateRandomColor()
+    };
+
+    cities.push(newCity);
+
+    await AsyncStorage.setItem(
+      'savedCities',
+      JSON.stringify(cities),
+    );
+
+    navigation.goBack();
+  }
 
   return (
     <View style={styles.screenContainer}>
@@ -33,7 +74,7 @@ function AddCityScreen() {
         />
 
         {/* Primary Button */}
-        <Pressable style={styles.primaryButton}>
+        <Pressable style={styles.primaryButton} onPress={addCity}>
           <Text style={styles.primaryButtonText}>Add city</Text>
         </Pressable>
 
