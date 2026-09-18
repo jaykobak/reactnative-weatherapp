@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView, RefreshControl } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useState, useCallback } from 'react';
@@ -22,7 +22,34 @@ function SavedCitiesScreen() {
   ]);
   const [temperatures, setTemperatures] = useState({});
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  async function refreshCities() {
+    setRefreshing(true);
+
+    await loadTemperatures(cities);
+
+    setRefreshing(false);
+  }
+
   async function loadCities() {
+    await AsyncStorage.setItem('savedCities', JSON.stringify([
+    { id: 1, name: 'Lisbon', color: '#F5A623' },
+    { id: 2, name: 'Tokyo', color: '#94A3B8' },
+    { id: 3, name: 'Austin', color: '#3B82F6' },
+    { id: 4, name: 'London', color: '#22C55E' },
+    { id: 5, name: 'Paris', color: '#A855F7' },
+    { id: 6, name: 'Lagos', color: '#EF4444' },
+    { id: 7, name: 'New York', color: '#F5A623' },
+    { id: 8, name: 'Dubai', color: '#94A3B8' },
+    { id: 9, name: 'Toronto', color: '#3B82F6' },
+    { id: 10, name: 'Sydney', color: '#22C55E' },
+    { id: 11, name: 'Brighton', color: '#22C55E' },
+    { id: 12, name: 'Good', color: '#22C55E' },
+    { id: 13, name: 'Brighn', color: '#22C55E' },
+    { id: 14, name: 'Bon', color: '#22C55E' },
+  ]))
+
     const savedCities = await AsyncStorage.getItem('savedCities');
 
     console.log(savedCities)
@@ -100,20 +127,27 @@ function SavedCitiesScreen() {
         {/* Divider */}
         <View style={[styles.divider, { marginBottom: 15 }]} />
 
-        {/* City rows */}
-        {cities.map(city => {
-          return (
-            <City
-              key={city.id}
-              cName={city.name}
-              cTemp={temperatures[city.name]}
-              cColor={city.color}
-              onPress={() => {
-                navigation.navigate('WeatherDetail', { cityName: city.name });
-              }}
-            />
-          );
-        })}
+        <ScrollView refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={refreshCities}
+          />
+        }>
+          {/* City rows */}
+          {cities.map(city => {
+            return (
+              <City
+                key={city.id}
+                cName={city.name}
+                cTemp={temperatures[city.name]}
+                cColor={city.color}
+                onPress={() => {
+                  navigation.navigate('WeatherDetail', { cityName: city.name });
+                }}
+              />
+            );
+          })}
+        </ScrollView>
       </View>
     </View>
   );
@@ -143,6 +177,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     padding: 20,
     paddingBottom: 30,
+    height: '50%',
   },
 
   wrapper: {
